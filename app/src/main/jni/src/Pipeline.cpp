@@ -4,12 +4,9 @@
 
 #include "../include/Pipeline.h"
 
-
 namespace pr {
 
     std::vector<std::string> chars_code{"京","沪","津","渝","冀","晋","蒙","辽","吉","黑","苏","浙","皖","闽","赣","鲁","豫","鄂","湘","粤","桂","琼","川","贵","云","藏","陕","甘","青","宁","新","0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","J","K","L","M","N","P","Q","R","S","T","U","V","W","X","Y","Z"};
-
-
 
     PipelinePR::PipelinePR(std::string detector_filename,
                            std::string finemapping_prototxt, std::string finemapping_caffemodel,
@@ -22,12 +19,10 @@ namespace pr {
     }
 
     PipelinePR::~PipelinePR() {
-
         delete plateDetection;
         delete fineMapping;
         delete plateSegmentation;
         delete generalRecognizer;
-
     }
 
     std::vector<PlateInfo> PipelinePR:: RunPiplineAsImage(cv::Mat plateImage) {
@@ -42,9 +37,6 @@ namespace pr {
             image_finemapping = fineMapping->FineMappingVertical(image_finemapping);
 
             image_finemapping = pr::fastdeskew(image_finemapping, 5);
-//
-//            cv::imshow("image_finemapping", image_finemapping);
-//            cv::waitKey(0);
 
             image_finemapping = fineMapping->FineMappingHorizon(image_finemapping, 2, 5);
 

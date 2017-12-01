@@ -65,8 +65,13 @@ namespace pr{
 
         cv::Size size(skewPlate.cols + extend_padding ,skewPlate.rows);
 
-        float interval = abs(sin((angle /180) * 3.14)* skewPlate.rows);
-//        std::cout<<interval<<std::endl;
+        float sinValue = sin((angle /180) * 3.14)* skewPlate.rows;
+        float interval;
+        if(sinValue < 0.0f){
+            interval = -sinValue;
+        }else{
+            interval = sinValue;
+        }
 
         cv::Point2f pts1[4] = {cv::Point2f(0,0),cv::Point2f(0,size_o.height),cv::Point2f(size_o.width,0),cv::Point2f(size_o.width,size_o.height)};
         if(angle>0) {

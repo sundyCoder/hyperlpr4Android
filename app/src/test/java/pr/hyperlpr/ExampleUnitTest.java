@@ -1,4 +1,4 @@
-package pr.platerecognization;
+package pr.hyperlpr;
 
 import org.junit.Test;
 

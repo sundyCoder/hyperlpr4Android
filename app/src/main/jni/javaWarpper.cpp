@@ -31,7 +31,7 @@ std::string jstring2str(JNIEnv* env, jstring jstr)
 
 extern "C" {
 JNIEXPORT jlong JNICALL
-Java_pr_platerecognization_PlateRecognition_InitPlateRecognizer(
+Java_pr_hyperlpr_DeepCarUtil_InitPlateRecognizer(
         JNIEnv *env, jobject obj,
         jstring detector_filename,
         jstring finemapping_prototxt, jstring finemapping_caffemodel,
@@ -59,14 +59,14 @@ Java_pr_platerecognization_PlateRecognition_InitPlateRecognizer(
 
 
 JNIEXPORT jstring JNICALL
-Java_pr_platerecognization_PlateRecognition_SimpleRecognization(
+Java_pr_hyperlpr_DeepCarUtil_SimpleRecognization(
         JNIEnv *env, jobject obj,
         jlong matPtr, jlong object_pr) {
     pr::PipelinePR *PR = (pr::PipelinePR *) object_pr;
     cv::Mat &mRgb = *(cv::Mat *) matPtr;
     cv::Mat rgb;
     cv::cvtColor(mRgb,rgb,cv::COLOR_RGBA2BGR);
-    cv::imwrite("/sdcard/demo.jpg",rgb);
+    //cv::imwrite("/sdcard/result.jpg",rgb);
 
     std::vector<pr::PlateInfo> list_res= PR->RunPiplineAsImage(rgb);
     std::string concat_results;
@@ -80,14 +80,11 @@ Java_pr_platerecognization_PlateRecognition_SimpleRecognization(
     return env->NewStringUTF(concat_results.c_str());
 
 }
-JNIEXPORT jstring JNICALL
-Java_pr_platerecognization_PlateRecognition_ReleasePlateRecognizer(
-        JNIEnv *env, jobject obj,
-        jlong object_re) {
-//    std::string hello = "Hello from C++";
+JNIEXPORT void JNICALL
+Java_pr_hyperlpr_DeepCarUtil_ReleasePlateRecognizer( JNIEnv *env, jobject obj, jlong object_re) {
     pr::PipelinePR *PR = (pr::PipelinePR *) object_re;
     delete PR;
-}
+    }
 }
 
 

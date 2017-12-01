@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">deepPR</string>
+    <string name="app_name">hyperlpr</string>
+    <string name="action_settings">Settings</string>
 </resources>

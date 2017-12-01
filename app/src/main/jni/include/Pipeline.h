@@ -31,13 +31,6 @@ namespace pr{
 
             std::vector<std::string> plateRes;
             std::vector<PlateInfo> RunPiplineAsImage(cv::Mat plateImage);
-
-
-
-
-
-
-
     };
 
 

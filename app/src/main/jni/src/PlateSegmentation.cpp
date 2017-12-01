@@ -135,7 +135,6 @@ namespace pr{
 
                 }
 
-
                 final_bdbox.x += left;
 
                 rects.push_back(final_bdbox);
@@ -145,9 +144,6 @@ namespace pr{
                 rects.push_back(roi);
             }
         }
-
-
-
     }
     void avgfilter(float *angle_list,int size,int windowsSize) {
         float *filterd = new float[size];
@@ -159,9 +155,6 @@ namespace pr{
 //        kernal+=windowsSize;
         int r = windowsSize/2;
 
-
-
-
         for (int i = 0; i < size; i++) {
             float avg = 0.00f;
             for (int j = 0; j < windowsSize; j++) {
@@ -170,17 +163,14 @@ namespace pr{
             }
 //            avg = avg / windowsSize;
             angle_list[i] = avg;
-
         }
 
-        delete filterd;
+        delete[] filterd;
     }
 
     void PlateSegmentation::templateMatchFinding(const cv::Mat &respones,int windowsWidth,std::pair<float,std::vector<int>> &candidatePts){
         int rows = respones.rows;
         int cols = respones.cols;
-
-
 
         float *data = (float*)respones.data;
         float *engNum_prob = data;
@@ -197,9 +187,6 @@ namespace pr{
         drawHist(ch_prob,cols,"ch_prob");
                 cv::waitKey(0);
 #endif
-
-
-
 
         int cp_list[7];
         float loss_selected = -1;
@@ -223,9 +210,6 @@ namespace pr{
                     int md5 = (cp5_p3+cp6_p4)>>1;
                     int md6 = (cp6_p4+cp7_p5)>>1;
 
-
-
-
                     if(cp7_p5>=cols)
                         continue;
 //                    float loss = ch_prob[cp1_ch]+
@@ -234,9 +218,6 @@ namespace pr{
 //                                                                                                                                                                                          );
 
                     float loss = ch_prob[cp1_ch]*3 -(false_prob[cp3_p1]+false_prob[cp4_p2]+false_prob[cp5_p3]+false_prob[cp6_p4]+false_prob[cp7_p5]);
-
-
-
 
                     if(loss>loss_selected)
                     {
@@ -356,8 +337,6 @@ namespace pr{
             plateImage(rects[i]).copyTo(charImage);
             if(charImage.channels())
                 cv::cvtColor(charImage,charImage,cv::COLOR_BGR2GRAY);
-//            cv::imshow("image",charImage);
-//            cv::waitKey(0);
             cv::equalizeHist(charImage,charImage);
 //
 
@@ -366,9 +345,7 @@ namespace pr{
 
             std::pair<CharType,cv::Mat> char_instance;
             if(i == 0 ){
-
                 char_instance.first = CHINESE;
-
 
             } else if(i == 1){
                 char_instance.first = LETTER;

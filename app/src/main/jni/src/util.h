@@ -64,7 +64,6 @@ namespace util{
     }
     float computeSimilir(const cv::Mat &A,const cv::Mat &B)
     {
-
         cv::Mat histA,histB;
         histA = calcHist(A);
         histB = calcHist(B);
