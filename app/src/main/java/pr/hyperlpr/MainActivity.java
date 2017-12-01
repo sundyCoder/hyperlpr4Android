@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -54,6 +55,7 @@ public class MainActivity extends Activity {
     private Uri fileUri;
     private static String filePath = null;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
+    public TextView resultbox;
 
     String[] permissions = new String[]{Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -65,8 +67,8 @@ public class MainActivity extends Activity {
         @Override
         protected String doInBackground(String... params) {
             Mat m = new Mat(bmp.getWidth(), bmp.getHeight(), CvType.CV_8UC4);
-            double new_w = bmp.getWidth()*0.5;
-            double new_h = bmp.getHeight()*0.5;
+            double new_w = bmp.getWidth()*0.8;
+            double new_h = bmp.getHeight()*0.8;
             Size sz = new Size(new_w,new_h);
             Utils.bitmapToMat(bmp, m);
             Imgproc.resize(m,m,sz);
@@ -74,7 +76,7 @@ public class MainActivity extends Activity {
                 long startClock = System.currentTimeMillis();
                 String license = DeepCarUtil.SimpleRecognization(m.getNativeObjAddr(), handle);
                 long diff = System.currentTimeMillis() - startClock;
-                //Utils.matToBitmap(m, bmp);
+                resultbox.setText(String.valueOf(diff)+"ms");
                 Message msg = new Message();
                 Bundle b = new Bundle();
                 b.putString("license", license);
@@ -159,6 +161,7 @@ public class MainActivity extends Activity {
     private void initData() {
         im = (ImageView) findViewById(R.id.imageView);
         et = (EditText) findViewById(R.id.editText);
+        resultbox = (TextView)findViewById(R.id.textResult);
         buttonCamera = (ImageButton) findViewById(R.id.buttonCamera);
         buttonFolder = (ImageButton) findViewById(R.id.buttonFolder);
         buttonCamera.setOnClickListener(new View.OnClickListener() {
