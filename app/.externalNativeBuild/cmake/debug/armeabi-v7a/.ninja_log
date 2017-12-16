@@ -1,0 +1,10 @@
+# ninja log v5
+15	4360	0	CMakeFiles/hyperlpr.dir/src/main/jni/src/Recognizer.cpp.o	87e8f65322c99718
+8	4561	0	CMakeFiles/hyperlpr.dir/src/main/jni/javaWarpper.cpp.o	b8a542bf56f5185d
+5	4804	0	CMakeFiles/hyperlpr.dir/src/main/jni/src/FineMapping.cpp.o	958159b46d42ddb9
+6	4822	0	CMakeFiles/hyperlpr.dir/src/main/jni/src/Pipeline.cpp.o	57bdf3f1479489bd
+10	4926	0	CMakeFiles/hyperlpr.dir/src/main/jni/src/FastDeskew.cpp.o	be57b08a02f98452
+3	5021	0	CMakeFiles/hyperlpr.dir/src/main/jni/src/CNNRecognizer.cpp.o	8cf9ba66907cdb5b
+12	5198	0	CMakeFiles/hyperlpr.dir/src/main/jni/src/PlateDetection.cpp.o	618ff0d654b182e4
+17	5370	0	CMakeFiles/hyperlpr.dir/src/main/jni/src/PlateSegmentation.cpp.o	6295547538d1f36d
+5370	6488	0	../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libhyperlpr.so	6dba55f52198b5d2

@@ -1,0 +1,16 @@
+-- Check for working C compiler: D:/android/android-ndk-r16/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe
+-- Check for working C compiler: D:/android/android-ndk-r16/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: D:/android/android-ndk-r16/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe
+-- Check for working CXX compiler: D:/android/android-ndk-r16/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenCV: D:/ASTRI/workplace/OpenCV-android-sdk (found version "3.3.0") 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: D:/ASTRI/workplace/wenxun/hyperlpr4Android/app/.externalNativeBuild/cmake/debug/armeabi-v7a
