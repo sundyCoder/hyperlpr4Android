@@ -66,17 +66,10 @@ public class MainActivity extends Activity {
     private class plateTask extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... params) {
-            Mat m = new Mat(bmp.getWidth(), bmp.getHeight(), CvType.CV_8UC4);
-            double new_w = bmp.getWidth()*0.8;
-            double new_h = bmp.getHeight()*0.8;
-            Size sz = new Size(new_w,new_h);
+            Mat m = new Mat();
             Utils.bitmapToMat(bmp, m);
-            Imgproc.resize(m,m,sz);
             try {
-                long startClock = System.currentTimeMillis();
                 String license = DeepCarUtil.SimpleRecognization(m.getNativeObjAddr(), handle);
-                long diff = System.currentTimeMillis() - startClock;
-                resultbox.setText(String.valueOf(diff)+"ms");
                 Message msg = new Message();
                 Bundle b = new Bundle();
                 b.putString("license", license);

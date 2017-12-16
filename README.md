@@ -1,4 +1,4 @@
-# deepPR4Android
+# hyperlpr4Android
 
 热烈欢迎感兴趣的朋友，一起加入Android平台的研发。
 
@@ -7,4 +7,4 @@
 
 效果如下:
 
-![](https://i.imgur.com/ewW4xWa.jpg)
+![](./hyperlpr.jpg)
