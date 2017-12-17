@@ -66,10 +66,14 @@ public class MainActivity extends Activity {
     private class plateTask extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... params) {
-            Mat m = new Mat(bmp.getWidth(), bmp.getHeight(), CvType.CV_8UC4);
+            int width = bmp.getWidth();
+            int height = bmp.getHeight();
+            Mat m = new Mat(width, height, CvType.CV_8UC4);
             Utils.bitmapToMat(bmp, m);
-            Size sz = new Size(1000,800);
-            Imgproc.resize(m,m,sz);
+            if(width > 1000 || height > 1000){
+                Size sz = new Size(600,800);
+                Imgproc.resize(m,m,sz);
+            }
             try {
                 String license = DeepCarUtil.SimpleRecognization(m.getNativeObjAddr(), handle);
                 Message msg = new Message();
