@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="pr.hyperlpr">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.CAMERA"/>
 
@@ -14,7 +16,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:hardwareAccelerated="false"
+        android:debuggable="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="HardcodedDebugMode">
         <activity
             android:name="pr.hyperlpr.MainActivity"
             android:label="@string/app_name"
@@ -25,6 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ReadyDataActivity"/>
+        <activity android:name=".ResultActivity"/>
+        <service android:name=".task.ImageExtractionService"/>
     </application>
 
 </manifest>

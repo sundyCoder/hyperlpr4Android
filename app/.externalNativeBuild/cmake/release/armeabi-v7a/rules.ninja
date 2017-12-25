@@ -25,7 +25,7 @@ rule CUSTOM_COMMAND
 rule CXX_COMPILER__hyperlpr
   depfile = $DEP_FILE
   deps = gcc
-  command = D:\android\android-ndk-r16\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe  --target=armv7-none-linux-androideabi --gcc-toolchain=D:/android/android-ndk-r16/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64 --sysroot=D:/android/android-ndk-r16/sysroot  $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $IN_ABS
+  command = D:\DevelopSoftware\AndroidSDK\sdk\ndk-bundle\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe  --target=armv7-none-linux-androideabi --gcc-toolchain=D:/DevelopSoftware/AndroidSDK/sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64 --sysroot=D:/DevelopSoftware/AndroidSDK/sdk/ndk-bundle/sysroot  $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $IN_ABS
   description = Building CXX object $out
 
 
@@ -33,7 +33,7 @@ rule CXX_COMPILER__hyperlpr
 # Rule for linking CXX shared library.
 
 rule CXX_SHARED_LIBRARY_LINKER__hyperlpr
-  command = cmd.exe /C "$PRE_LINK && D:\android\android-ndk-r16\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe  --target=armv7-none-linux-androideabi --gcc-toolchain=D:/android/android-ndk-r16/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64 --sysroot=D:/android/android-ndk-r16/sysroot -fPIC $LANGUAGE_COMPILE_FLAGS $ARCH_FLAGS $LINK_FLAGS -shared $SONAME_FLAG$SONAME -o $TARGET_FILE @$RSP_FILE  && $POST_BUILD"
+  command = cmd.exe /C "$PRE_LINK && D:\DevelopSoftware\AndroidSDK\sdk\ndk-bundle\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe  --target=armv7-none-linux-androideabi --gcc-toolchain=D:/DevelopSoftware/AndroidSDK/sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64 --sysroot=D:/DevelopSoftware/AndroidSDK/sdk/ndk-bundle/sysroot -fPIC $LANGUAGE_COMPILE_FLAGS $ARCH_FLAGS $LINK_FLAGS -shared $SONAME_FLAG$SONAME -o $TARGET_FILE @$RSP_FILE  && $POST_BUILD"
   description = Linking CXX shared library $TARGET_FILE
   rspfile = $RSP_FILE
   rspfile_content = $in $LINK_PATH $LINK_LIBRARIES
@@ -44,7 +44,7 @@ rule CXX_SHARED_LIBRARY_LINKER__hyperlpr
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = D:\android\cmake\3.6.4111459\bin\cmake.exe -HD:\ASTRI\workplace\wenxun\hyperlpr4Android\app -BD:\ASTRI\workplace\wenxun\hyperlpr4Android\app\.externalNativeBuild\cmake\release\armeabi-v7a
+  command = D:\DevelopSoftware\AndroidSDK\sdk\cmake\3.6.4111459\bin\cmake.exe -HC:\Users\lichen\Desktop\gitTest\app -BC:\Users\lichen\Desktop\gitTest\app\.externalNativeBuild\cmake\release\armeabi-v7a
   description = Re-running CMake...
   generator = 1
 
@@ -53,7 +53,7 @@ rule RERUN_CMAKE
 # Rule for cleaning all built files.
 
 rule CLEAN
-  command = D:\android\cmake\3.6.4111459\bin\ninja.exe -t clean
+  command = D:\DevelopSoftware\AndroidSDK\sdk\cmake\3.6.4111459\bin\ninja.exe -t clean
   description = Cleaning all built files...
 
 
@@ -61,6 +61,6 @@ rule CLEAN
 # Rule for printing all primary targets available.
 
 rule HELP
-  command = D:\android\cmake\3.6.4111459\bin\ninja.exe -t targets
+  command = D:\DevelopSoftware\AndroidSDK\sdk\cmake\3.6.4111459\bin\ninja.exe -t targets
   description = All primary targets available:
 

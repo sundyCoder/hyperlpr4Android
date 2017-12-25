@@ -1,8 +1,4 @@
-package pr.hyperlpr;
-
-/**
- * Created by A1838 on 12/1/2017.
- */
+package pr.hyperlpr.util;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -17,6 +13,8 @@ import android.util.Log;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import pr.hyperlpr.Globals;
 
 
 public class DeepMediaFileUtil {
@@ -33,7 +31,7 @@ public class DeepMediaFileUtil {
         File mediaStorageDir = null;
         try
         {
-            mediaStorageDir = new File("/sdcard/"+ DeepCarUtil.ApplicationDir+"/");
+            mediaStorageDir = new File(Globals.SDCARD_DIR);
         }
         catch (Exception e)
         {
@@ -80,7 +78,7 @@ public class DeepMediaFileUtil {
                 final String type = split[0];
 
                 if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                    return Environment.getExternalStorageDirectory() + File.separator + split[1];
                 }
 
                 // TODO handle non-primary volumes

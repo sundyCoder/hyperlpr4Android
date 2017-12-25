@@ -1,55 +1,42 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
-    android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme = "@style/ThemeToolbar"
+        android:theme="@style/ThemeToolbar"
+        app:title="@string/app_name"
+        />
+
 
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
         android:id="@+id/imageView"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/editText" />
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="false"
+        android:scaleType="center" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:background="@null"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonCamera"
-        android:editable="false"
-        android:layout_alignBottom="@+id/buttonCamera" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonCamera"
-        android:src="@drawable/camera"
-        android:background="@null"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/buttonFolder"
-        android:layout_marginEnd="27dp" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:id="@+id/buttonFolder"
-        android:src="@drawable/folder"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/textResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="320dp"
-        android:layout_marginTop="78dp"
-        android:text="" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/toolbar"
+        android:layout_margin="5dp"
+        android:textSize="21sp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimaryDark"
+       />
 
 </RelativeLayout>

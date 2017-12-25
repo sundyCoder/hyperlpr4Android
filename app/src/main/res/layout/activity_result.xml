@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/ThemeToolbar"
+        app:popupTheme="@style/ThemeToolbar" />
+
+    <ImageView
+        android:id="@+id/first_face_image"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintVertical_bias="0.1"
+       />
+
+    <ImageView
+        android:id="@+id/second_face_image"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="@+id/first_face_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/first_face_image"
+        app:layout_constraintTop_toTopOf="@+id/first_face_image"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="1.0"
+        />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="txt"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@+id/first_face_image" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.05" />
+
+    <TextView
+        android:id="@+id/complete"
+        android:text="确认"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/second_face_image"
+        app:layout_constraintTop_toBottomOf="@+id/score"
+        app:layout_constraintVertical_bias="0.85" />
+</android.support.constraint.ConstraintLayout>
