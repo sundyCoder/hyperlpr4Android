@@ -1,7 +1,7 @@
 package pr.hyperlpr;
 
 import android.Manifest;
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,18 +9,17 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,116 +27,72 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
-import org.opencv.core.Mat;
 import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-
 import java.util.ArrayList;
 import java.util.List;
-import java.io.*;
+
+import pr.hyperlpr.util.DeepAssetUtil;
+import pr.hyperlpr.util.DeepCarUtil;
+import pr.hyperlpr.util.DeepMediaFileUtil;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "hyperlpr";
     public long handle;
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int SELECT_IMAGE_ACTIVITY_REQUEST_CODE = 200;
-    private static final String sdcarddir = "/sdcard/" + DeepCarUtil.ApplicationDir;
+    private static final int CHOOSE_FILE_ACTIVITY_REQUEST_CODE = 300;
+
     private Bitmap bmp;
-    private Bitmap Originbitmap = bmp;
+    //备份 bitmap
+    private Bitmap originBitmap = bmp;
     private ImageView im;
-    private ImageButton buttonCamera;
-    private ImageButton buttonFolder;
-    private EditText et;
+    private Toolbar mToolbar;
     private boolean b2Recognition = true;
     private Uri fileUri;
     private static String filePath = null;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
     public TextView resultbox;
+    private boolean isLoadOpenCVSuccess = false;
 
-    String[] permissions = new String[]{Manifest.permission.CAMERA,
+    //需要 Camera
+    String[] permissions = new String[]{
+            Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS};//在SDCard中创建与删除文件权限
     List<String> mPermissionList = new ArrayList<>();
 
-    private class plateTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            int width = bmp.getWidth();
-            int height = bmp.getHeight();
-            Mat m = new Mat(width, height, CvType.CV_8UC4);
-            Utils.bitmapToMat(bmp, m);
-            if(width > 1000 || height > 1000){
-                Size sz = new Size(600,800);
-                Imgproc.resize(m,m,sz);
-            }
-            try {
-                String license = DeepCarUtil.SimpleRecognization(m.getNativeObjAddr(), handle);
-                Message msg = new Message();
-                Bundle b = new Bundle();
-                b.putString("license", license);
-                b.putParcelable("bitmap", bmp);
-                msg.what = 1;
-                msg.setData(b);
-                mHandler.sendMessage(msg);
-            } catch (Exception e) {
-                Log.d(TAG, "exception occured!");
-            }
-            return null;
-        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);//取消标题栏
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//全屏
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setContentView(R.layout.activity_main);
+        checkPermission();
+        initView();
+        initEvent();
     }
 
-    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
-        @Override
-        public void onManagerConnected(int status) {
-            switch (status) {
-                case LoaderCallbackInterface.SUCCESS: {
-                    Log.i(TAG, "OpenCV loaded successfully");
-                    System.loadLibrary("hyperlpr");
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... voids) {
-                            //initFile();
-                            initRecognizer();
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Void aVoid) {
-                            super.onPostExecute(aVoid);
-                            if (filePath != null) {
-                                bmp = BitmapFactory.decodeFile(filePath);
-                            } else {
-                                bmp = BitmapFactory.decodeFile(sdcarddir + "/" + DeepCarUtil.demoImgPath);
-                            }
-                            im.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    im.setImageBitmap(bmp);
-                                }
-                            }, 10);
-                            Originbitmap = bmp;
-                            if (bmp != null)
-                                new plateTask().execute();
-                        }
-                    }.execute();
-                }
-                break;
-                default: {
-                    super.onManagerConnected(status);
-                }
-                break;
-            }
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (mToolbar != null){
+            setSupportActionBar(mToolbar);
         }
-    };
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!OpenCVLoader.initDebug()) {
+        //初始化openCV
+
+        if (!isLoadOpenCVSuccess && !OpenCVLoader.initDebug()) {
             Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_3_0, this, mLoaderCallback);
         } else {
@@ -147,53 +102,73 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);//取消标题栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//全屏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_main);
-        checkPermission();
-        initData();
+    protected void onDestroy() {
+        super.onDestroy();
+        if (originBitmap != null && !originBitmap.isRecycled()){
+            originBitmap.recycle();
+            originBitmap = null;
+        }
+
+        if (bmp != null && !bmp.isRecycled()){
+            bmp.recycle();
+            bmp = null;
+        }
     }
 
-    private void initData() {
+    private void initView() {
         im = (ImageView) findViewById(R.id.imageView);
-        et = (EditText) findViewById(R.id.editText);
         resultbox = (TextView)findViewById(R.id.textResult);
-        buttonCamera = (ImageButton) findViewById(R.id.buttonCamera);
-        buttonFolder = (ImageButton) findViewById(R.id.buttonFolder);
-        buttonCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                fileUri = DeepMediaFileUtil.getOutputMediaFileUri(1);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-            }
-        });
-        buttonFolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                intent.setType("image/*" );
-                startActivityForResult(intent, SELECT_IMAGE_ACTIVITY_REQUEST_CODE);
-            }
-        });
+        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+    }
+
+    private void initEvent(){
+        //双击识别.
         im.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (b2Recognition) {
                     if (bmp != null)
-                        new plateTask().execute();
+                        new PlateAsyncTask().execute();
                 } else {
-                    bmp = Originbitmap;
+                    bmp = originBitmap;
                     im.setImageBitmap(bmp);
-                    et.setText("");
+                    resultbox.setText(null);
+                    resultbox.setVisibility(View.INVISIBLE);
                 }
                 b2Recognition = !b2Recognition;
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main , menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selectId = item.getItemId();
+        switch (selectId){
+            case R.id.camera:
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                fileUri = DeepMediaFileUtil.getOutputMediaFileUri(1);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                break;
+            case R.id.pic:
+                Intent picIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                picIntent.setType("image/*" );
+                startActivityForResult(picIntent, SELECT_IMAGE_ACTIVITY_REQUEST_CODE);
+                break;
+            case R.id.moreCheck:
+                Intent sourceImageIntent  = new Intent(Intent.ACTION_GET_CONTENT);
+                sourceImageIntent.setType("application/x-zip-compressed");
+                sourceImageIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(sourceImageIntent , CHOOSE_FILE_ACTIVITY_REQUEST_CODE);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -201,20 +176,16 @@ public class MainActivity extends Activity {
      */
     private void checkPermission() {
         mPermissionList.clear();
-        /**
-         * 判断哪些权限未授予
-         */
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionList.add(permissions[i]);
+
+         //判断哪些权限未授予
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permission);
             }
         }
-        /**
-         * 判断是否为空
-         */
-        if (mPermissionList.isEmpty()) {//未授予的权限为空，表示都授予了
 
-        } else {//请求权限方法
+        //请求权限
+        if (!mPermissionList.isEmpty()) {
             String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
             ActivityCompat.requestPermissions(this, permissions, MY_PERMISSIONS_REQUEST_CAMERA);
         }
@@ -232,7 +203,6 @@ public class MainActivity extends Activity {
 
     }
 
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE == requestCode) {
@@ -242,53 +212,108 @@ public class MainActivity extends Activity {
                         Bitmap thumbnail = data.getParcelableExtra("data");
                         im.setImageBitmap(thumbnail);
                     }
-                } else {
-                    filePath = fileUri.getPath();
                 }
+
+                filePath = fileUri.getPath();
             }
         } else if (requestCode == SELECT_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && null != data) {
             fileUri = data.getData();
+            im.setImageURI(fileUri);
             filePath = DeepMediaFileUtil.getPath(this, fileUri);
+        }else if (requestCode == CHOOSE_FILE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && null != data){
+            Uri zipImage  = data.getData();
+            Intent intent = new Intent(MainActivity.this, ReadyDataActivity.class);
+            intent.putExtra("filePath", zipImage);
+            startActivity(intent);
+
         }
     }
 
 
-    public Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    Bundle b = msg.getData();
-                    String str = b.getString("license");
-                    et.setText(b.getString("license"));
-                    im.setImageBitmap((Bitmap) b.getParcelable("bitmap"));
-                    break;
-                default:
-                    break;
+    @SuppressLint("StaticFieldLeak")
+    private class PlateAsyncTask extends AsyncTask<String, Integer, String> {
+        private long startTime ;
+
+        @Override
+        protected String doInBackground(String... params) {
+            startTime = System.currentTimeMillis();
+            int width = bmp.getWidth();
+            int height = bmp.getHeight();
+            Mat m = new Mat(width, height, CvType.CV_8UC4);
+            Utils.bitmapToMat(bmp, m);
+            if(width > 1000 || height > 1000){
+                Size sz = new Size(600,800);
+                Imgproc.resize(m,m,sz);
             }
-            super.handleMessage(msg);
+            try {
+                return  DeepCarUtil.SimpleRecognization(m.getNativeObjAddr(), handle);
+            } catch (Exception e) {
+                Log.d(TAG, "exception occured!");
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String license) {
+            super.onPostExecute(license);
+            long endTime = System.currentTimeMillis();
+            Log.i(TAG, "total time is : " + (endTime - startTime));
+
+            resultbox.setText(license);
+            resultbox.setVisibility(View.VISIBLE);
+
+            im.setImageBitmap(originBitmap);
+        }
+    }
+
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @SuppressLint("StaticFieldLeak")
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS: {
+                    Log.i(TAG, "OpenCV loaded successfully");
+                    //在加载openCV 成功后, 开始加载 hyperlpr so 文件
+                    if (!isLoadOpenCVSuccess){
+                        System.loadLibrary("hyperlpr");
+                    }
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            handle = DeepAssetUtil.initRecognizer(MainActivity.this);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            if (filePath != null) {
+                                bmp = BitmapFactory.decodeFile(filePath);
+                                im.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        im.setImageBitmap(bmp);
+                                    }
+                                });
+                                originBitmap = bmp;
+                                if (bmp != null) {
+                                    new PlateAsyncTask().execute();
+                                }
+                            }
+                        }
+                    }.execute();
+
+                    isLoadOpenCVSuccess = true;
+                }
+                break;
+                default: {
+                    super.onManagerConnected(status);
+                }
+                break;
+            }
         }
     };
 
-    private void copyFilesFromAssets() {
-        DeepAssetUtil.CopyAssets(this, DeepCarUtil.ApplicationDir, sdcarddir);
-    }
 
-    public void initRecognizer()
-    {
-        String cascade_filename = sdcarddir + File.separator + DeepCarUtil.cascade_filename;
-        String finemapping_prototxt = sdcarddir + File.separator + DeepCarUtil.finemapping_prototxt;
-        String finemapping_caffemodel = sdcarddir + File.separator + DeepCarUtil.finemapping_caffemodel;
-        String segmentation_prototxt = sdcarddir + File.separator + DeepCarUtil.segmentation_prototxt;
-        String segmentation_caffemodel = sdcarddir + File.separator + DeepCarUtil.segmentation_caffemodel;
-        String character_prototxt = sdcarddir + File.separator + DeepCarUtil.character_prototxt;
-        String character_caffemodel = sdcarddir + File.separator + DeepCarUtil.character_caffemodel;
-        copyFilesFromAssets();
 
-        handle  =  DeepCarUtil.InitPlateRecognizer(
-                cascade_filename,
-                finemapping_prototxt,finemapping_caffemodel,
-                segmentation_prototxt,segmentation_caffemodel,
-                character_prototxt,character_caffemodel
-        );
-    }
 }

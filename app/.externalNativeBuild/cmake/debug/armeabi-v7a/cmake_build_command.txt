@@ -1,15 +1,15 @@
-Executable : D:\android\cmake\3.6.4111459\bin\cmake.exe
+Executable : D:\DevelopSoftware\AndroidSDK\sdk\cmake\3.6.4111459\bin\cmake.exe
 arguments : 
--HD:\ASTRI\workplace\wenxun\hyperlpr4Android\app
--BD:\ASTRI\workplace\wenxun\hyperlpr4Android\app\.externalNativeBuild\cmake\debug\armeabi-v7a
+-HC:\Users\lichen\Desktop\gitTest\app
+-BC:\Users\lichen\Desktop\gitTest\app\.externalNativeBuild\cmake\debug\armeabi-v7a
 -DANDROID_ABI=armeabi-v7a
 -DANDROID_PLATFORM=android-22
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\ASTRI\workplace\wenxun\hyperlpr4Android\app\build\intermediates\cmake\debug\obj\armeabi-v7a
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\lichen\Desktop\gitTest\app\build\intermediates\cmake\debug\obj\armeabi-v7a
 -DCMAKE_BUILD_TYPE=Debug
--DANDROID_NDK=D:\android\android-ndk-r16
+-DANDROID_NDK=D:\DevelopSoftware\AndroidSDK\sdk\ndk-bundle
 -DCMAKE_CXX_FLAGS=-std=c++11
--DCMAKE_TOOLCHAIN_FILE=D:\android\android-ndk-r16\build\cmake\android.toolchain.cmake
--DCMAKE_MAKE_PROGRAM=D:\android\cmake\3.6.4111459\bin\ninja.exe
+-DCMAKE_TOOLCHAIN_FILE=D:\DevelopSoftware\AndroidSDK\sdk\ndk-bundle\build\cmake\android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=D:\DevelopSoftware\AndroidSDK\sdk\cmake\3.6.4111459\bin\ninja.exe
 -GAndroid Gradle - Ninja
 jvmArgs : 
 

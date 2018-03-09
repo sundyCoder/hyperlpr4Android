@@ -31,7 +31,7 @@ std::string jstring2str(JNIEnv* env, jstring jstr)
 
 extern "C" {
 JNIEXPORT jlong JNICALL
-Java_pr_hyperlpr_DeepCarUtil_InitPlateRecognizer(
+Java_pr_hyperlpr_util_DeepCarUtil_InitPlateRecognizer(
         JNIEnv *env, jobject obj,
         jstring detector_filename,
         jstring finemapping_prototxt, jstring finemapping_caffemodel,
@@ -59,7 +59,7 @@ Java_pr_hyperlpr_DeepCarUtil_InitPlateRecognizer(
 
 
 JNIEXPORT jstring JNICALL
-Java_pr_hyperlpr_DeepCarUtil_SimpleRecognization(
+Java_pr_hyperlpr_util_DeepCarUtil_SimpleRecognization(
         JNIEnv *env, jobject obj,
         jlong matPtr, jlong object_pr) {
     pr::PipelinePR *PR = (pr::PipelinePR *) object_pr;
@@ -81,7 +81,7 @@ Java_pr_hyperlpr_DeepCarUtil_SimpleRecognization(
 
 }
 JNIEXPORT void JNICALL
-Java_pr_hyperlpr_DeepCarUtil_ReleasePlateRecognizer( JNIEnv *env, jobject obj, jlong object_re) {
+Java_pr_hyperlpr_util_DeepCarUtil_ReleasePlateRecognizer( JNIEnv *env, jobject obj, jlong object_re) {
     pr::PipelinePR *PR = (pr::PipelinePR *) object_re;
     delete PR;
     }

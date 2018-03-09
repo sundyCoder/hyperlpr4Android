@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/hyperlpr4Android.iml" filepath="$PROJECT_DIR$/hyperlpr4Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gitTest.iml" filepath="$PROJECT_DIR$/gitTest.iml" />
+      <module fileurl="file://C:\Users\lichen\Desktop\gitTest\hyperlpr4Android.iml" filepath="C:\Users\lichen\Desktop\gitTest\hyperlpr4Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/openCVLibrary330/openCVLibrary330.iml" filepath="$PROJECT_DIR$/openCVLibrary330/openCVLibrary330.iml" />
     </modules>
   </component>
